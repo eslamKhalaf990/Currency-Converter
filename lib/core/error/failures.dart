@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-abstract class Failure extends Equatable {
+sealed class Failure extends Equatable {
   final String message;
 
   const Failure(this.message);
@@ -19,10 +19,6 @@ class CacheFailure extends Failure {
 
 class NetworkFailure extends Failure {
   const NetworkFailure(super.message);
-}
-
-class AuthFailure extends Failure {
-  const AuthFailure(super.message);
 }
 
 class ValidationFailure extends Failure {
