@@ -33,11 +33,29 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     DeleteHistoryItem event,
     Emitter<HistoryState> emit,
   ) async {
+    HistoryLoaded? previousState;
+    
+    // Optimistic update for better UX
+    if (state is HistoryLoaded) {
+      previousState = state as HistoryLoaded;
+      final updatedRecords = previousState.records
+          .where((record) => record.id != event.id)
+          .toList();
+      emit(HistoryLoaded(updatedRecords));
+    }
+
     final result = await deleteHistoryEntry(event.id);
-    result.fold((failure) => emit(HistoryError(failure.message)), (_) {
-      // If state is HistoryLoaded we could optimistically update it,
-      // but triggering a reload is safer and consistent for simpler tasks.
-      add(const LoadHistory());
-    });
+    result.fold(
+      (failure) {
+        emit(HistoryError(failure.message));
+        if (previousState != null) {
+          // Revert back on failure
+          emit(previousState);
+        }
+      },
+      (_) {
+        // Deletion successful, state already updated optimistically
+      },
+    );
   }
 }

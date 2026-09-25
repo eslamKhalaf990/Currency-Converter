@@ -45,98 +45,117 @@ class HistoryRowItem extends StatelessWidget {
         color: colorScheme.error,
         child: Icon(Icons.delete_outline, color: colorScheme.onError),
       ),
-      child: Padding(
-        padding: const EdgeInsetsDirectional.symmetric(
-          horizontal: Dimens.spacingL,
-          vertical: Dimens.spacingM,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: Dimens.spacingL,
+              vertical: Dimens.spacingM,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (baseCur != null &&
-                          baseCur.flag != null &&
-                          !baseCur.isFlagImage)
-                        Text(
-                          '${CurrencyUtils.currencyToEmoji(baseCur)} ',
-                          style: textTheme.bodyLarge,
-                        ),
-                      Text(
-                        record.baseCurrency,
-                        style: textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          if (baseCur != null &&
+                              baseCur.flag != null &&
+                              !baseCur.isFlagImage)
+                            Text(
+                              '${CurrencyUtils.currencyToEmoji(baseCur)} ',
+                              style: textTheme.bodyLarge,
+                            ),
+                          Text(
+                            record.baseCurrency,
+                            style: textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsetsDirectional.symmetric(
+                              horizontal: Dimens.spacingXS,
+                            ),
+                            child: Icon(
+                              Icons.arrow_forward_ios,
+                              size: 12,
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          if (targetCur != null &&
+                              targetCur.flag != null &&
+                              !targetCur.isFlagImage)
+                            Text(
+                              '${CurrencyUtils.currencyToEmoji(targetCur)} ',
+                              style: textTheme.bodyLarge,
+                            ),
+                          Text(
+                            record.targetCurrency,
+                            style: textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.symmetric(
-                          horizontal: Dimens.spacingXS,
+                      if (baseCur != null && targetCur != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: Dimens.spacingXS),
+                          child: Text(
+                            '${baseCur.name} to ${targetCur.name}',
+                            style: textTheme.bodySmall?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                          ),
                         ),
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          size: 12,
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      if (targetCur != null &&
-                          targetCur.flag != null &&
-                          !targetCur.isFlagImage)
-                        Text(
-                          '${CurrencyUtils.currencyToEmoji(targetCur)} ',
-                          style: textTheme.bodyLarge,
-                        ),
-                      Text(
-                        record.targetCurrency,
-                        style: textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      const SizedBox(height: Dimens.spacingS),
+                      Text(dateFormatted, style: textTheme.bodySmall),
                     ],
                   ),
-                  if (baseCur != null && targetCur != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: Dimens.spacingXS),
-                      child: Text(
-                        '${baseCur.name} to ${targetCur.name}',
-                        style: textTheme.bodySmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
+                ),
+                const SizedBox(width: Dimens.spacingS),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '$baseSymbol ${AppFormatters.formatCurrencyAmount(baseAmount)}',
+                      style: textTheme.bodyMedium,
+                    ),
+                    Container(
+                      width: 1,
+                      height: 16,
+                      color: colorScheme.outlineVariant,
+                      margin: const EdgeInsetsDirectional.symmetric(
+                        horizontal: Dimens.spacingM,
                       ),
                     ),
-                  const SizedBox(height: Dimens.spacingS),
-                  Text(dateFormatted, style: textTheme.bodySmall),
-                ],
-              ),
-            ),
-            const SizedBox(width: Dimens.spacingS),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  '$baseSymbol ${AppFormatters.formatCurrencyAmount(baseAmount)}',
-                  style: textTheme.bodyMedium,
-                ),
-                Container(
-                  width: 1,
-                  height: 16,
-                  color: colorScheme.outlineVariant,
-                  margin: const EdgeInsetsDirectional.symmetric(
-                    horizontal: Dimens.spacingM,
-                  ),
-                ),
-                Text(
-                  '$targetSymbol ${AppFormatters.formatCurrencyAmount(convertedAmount)}',
-                  style: textTheme.bodyMedium,
+                    Text(
+                      '$targetSymbol ${AppFormatters.formatCurrencyAmount(convertedAmount)}',
+                      style: textTheme.bodyMedium,
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+          PositionedDirectional(
+            top: 4,
+            end: 4,
+            child: IconButton(
+              onPressed: onDismissed,
+              icon: Icon(
+                Icons.close,
+                size: 20,
+                color: colorScheme.error,
+              ),
+              padding: const EdgeInsets.all(Dimens.spacingXS),
+              constraints: const BoxConstraints(),
+              splashRadius: 24,
+            ),
+          ),
+        ],
       ),
     );
   }
