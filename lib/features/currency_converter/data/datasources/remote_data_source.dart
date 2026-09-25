@@ -10,6 +10,9 @@ import '../models/exchange_rate_model.dart';
 abstract class CurrencyRemoteDataSource {
   /// Pulls live real-time rate multipliers dynamically from the server endpoint based on client currency choices.
   Future<List<ExchangeRateModel>> getExchangeRates(String baseCurrency);
+
+  /// Pulls the dynamically supported list of currencies currently valid on the server endpoint.
+  Future<Map<String, String>> getCurrencies();
 }
 
 /// Implements standard REST GET requests over the dio networking library.
@@ -33,5 +36,21 @@ class CurrencyRemoteDataSourceImpl implements CurrencyRemoteDataSource {
 
     // Call the specific parser for Frankfurter's nested object structure
     return await compute(parseFrankfurterResponse, rawJson);
+  }
+
+  @override
+  Future<Map<String, String>> getCurrencies() async {
+    final response = await dio.get('/currencies');
+    final responseData = response.data;
+
+    final rawJson = responseData is String
+        ? responseData
+        : jsonEncode(responseData);
+
+    final Map<String, dynamic> parsedJson = await compute(
+      parseJsonObject,
+      rawJson,
+    );
+    return parsedJson.map((key, value) => MapEntry(key, value.toString()));
   }
 }

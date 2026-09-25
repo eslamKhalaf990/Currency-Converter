@@ -12,6 +12,9 @@ abstract class CurrencyRepository {
     String baseCurrency,
   );
 
+  /// Dynamically pulls the full dictionary of supported currencies from the API.
+  Future<Either<Failure, Map<String, String>>> getCurrencies();
+
   /// Persists a newly calculated conversion record into local device storage.
   Future<Either<Failure, void>> saveConversion(ConversionRecord record);
 

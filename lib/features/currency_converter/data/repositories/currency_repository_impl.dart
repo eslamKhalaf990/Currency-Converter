@@ -38,6 +38,14 @@ class CurrencyRepositoryImpl extends BaseRepository
   }
 
   @override
+  Future<Either<Failure, Map<String, String>>> getCurrencies() {
+    return handleNetworkCall<Map<String, String>, Map<String, String>>(
+      call: () => remoteDataSource.getCurrencies(),
+      mapper: (data) => data,
+    );
+  }
+
+  @override
   Future<Either<Failure, void>> saveConversion(ConversionRecord record) {
     return handleLocalAction<void>(
       action: () async {
