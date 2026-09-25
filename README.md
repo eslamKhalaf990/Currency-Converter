@@ -47,8 +47,8 @@ In designing and building this application, several engineering decisions were m
 - **Functional Error Handling:** 
   To guarantee stability, `dartz` (`Either<Failure, Success>`) is implemented at the repository boundaries (`BaseRepository`). This ensures that raw network or cache exceptions are caught at the source, mapped into domain-specific failures, and importantly, never leak directly into the core business logic.
   
-- **Network Resilience & Offline Fallback:** 
-  The app aggressively caches network responses natively using **Hive**, providing an incredibly robust offline fallback if the network drops and ensuring zero service disruption.
+- **Network Resilience & Offline Fallback (Stale Data Warning):** 
+  The app aggressively caches successful network responses locally using **Hive**. If the device goes offline, the repository seamlessly intercepts the failing network request and falls back to these locally cached rates to ensure zero service disruption. Crucially, whenever rates are cached, they are stamped with exact timestamps. If an offline conversion occurs utilizing this cache, the app gracefully degrades by displaying a prominent UI warning indicating the data is stale, alongside the exact date and time the rates were last synced.
 
 ## 4. Presentation Layer & UI
 
