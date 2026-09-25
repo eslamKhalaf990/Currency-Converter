@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/dimens.dart';
 
@@ -12,6 +13,7 @@ class AppTextField extends StatelessWidget {
   final String? errorText;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
+  final String? suffixText;
   final bool readOnly;
 
   const AppTextField({
@@ -24,6 +26,7 @@ class AppTextField extends StatelessWidget {
     this.errorText,
     this.prefixIcon,
     this.suffixIcon,
+    this.suffixText,
     this.readOnly = false,
   });
 
@@ -36,47 +39,55 @@ class AppTextField extends StatelessWidget {
       onChanged: onChanged,
       readOnly: readOnly,
       style: const TextStyle(
-        color: AppTheme.secondaryDarkGray,
-        fontSize: 16,
+        color: Colors.black,
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
       ),
       decoration: InputDecoration(
         hintText: hintText,
+        hintStyle: const TextStyle(
+          color: Colors.grey,
+          fontSize: 18,
+          fontWeight: FontWeight.normal,
+        ),
         errorText: errorText,
+        errorStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
+        suffixText: suffixText,
+        suffixStyle: const TextStyle(
+          color: Colors.black54,
+          fontSize: 22,
+          fontWeight: FontWeight.w600,
+        ),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: const Color(0xFFF5F5F5),
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: Dimens.spacingM,
-          vertical: Dimens.spacingM,
+          horizontal: Dimens.spacingL,
+          vertical: Dimens.spacingL,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Dimens.radiusS),
-          borderSide: BorderSide(
-            color: Colors.grey.shade300,
-            width: 1.0,
-          ),
+          borderRadius: BorderRadius.circular(Dimens.radiusM),
+          borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Dimens.radiusS),
-          borderSide: BorderSide(
-            color: Colors.grey.shade300,
-            width: 1.0,
-          ),
+          borderRadius: BorderRadius.circular(Dimens.radiusM),
+          borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Dimens.radiusS),
+          borderRadius: BorderRadius.circular(Dimens.radiusM),
           borderSide: const BorderSide(
-            color: AppTheme.primaryRed,
-            width: 1.5,
+            color: AppTheme.primaryColor,
+            width: 2.0,
           ),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Dimens.radiusS),
-          borderSide: const BorderSide(
-            color: AppTheme.primaryRed,
-            width: 1.0,
-          ),
+          borderRadius: BorderRadius.circular(Dimens.radiusM),
+          borderSide: const BorderSide(color: Colors.red, width: 1.5),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(Dimens.radiusM),
+          borderSide: const BorderSide(color: Colors.red, width: 2.0),
         ),
       ),
     );

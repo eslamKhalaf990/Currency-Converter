@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/di/injection.dart' as di;
+import 'core/theme/app_theme.dart';
+import 'features/currency_converter/presentation/bloc/converter_bloc.dart';
+import 'features/currency_converter/presentation/pages/converter_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,14 +20,10 @@ class EfgCurrencyConverterApp extends StatelessWidget {
     return MaterialApp(
       title: 'Currency Converter',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF0D47A1),
-        ), // EFG blue-ish seed
-        useMaterial3: true,
-      ),
-      home: const Scaffold(
-        body: Center(child: Text('Currency Converter Initialized')),
+      theme: AppTheme.lightTheme,
+      home: BlocProvider(
+        create: (context) => di.sl<ConverterBloc>(),
+        child: const ConverterPage(),
       ),
     );
   }
