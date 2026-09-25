@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:currency_converter/core/theme/dimens.dart';
 import 'package:currency_converter/core/widgets/app_container.dart';
 import 'package:currency_converter/features/converter/presentation/widgets/currency_dropdown.dart';
+import 'package:currency_converter/features/converter/presentation/widgets/currency_dropdown_skeleton.dart';
 
 class CurrencySwapSection extends StatelessWidget {
   final ValueNotifier<String> fromCurrency;
@@ -32,11 +33,7 @@ class CurrencySwapSection extends StatelessWidget {
             children: [
               Expanded(
                 child: isLoading
-                    ? AppContainer(
-                        color: colorScheme.surfaceContainerHigh,
-                        radius: Dimens.radiusM,
-                        child: const SizedBox.shrink(),
-                      )
+                    ? const CurrencyDropdownSkeleton()
                     : CurrencyDropdown(
                         title: 'From',
                         value: fromCurrency.value,
@@ -49,11 +46,7 @@ class CurrencySwapSection extends StatelessWidget {
               const SizedBox(width: Dimens.spacingM),
               Expanded(
                 child: isLoading
-                    ? AppContainer(
-                        color: colorScheme.surfaceContainerHigh,
-                        radius: Dimens.radiusM,
-                        child: const SizedBox.shrink(),
-                      )
+                    ? const CurrencyDropdownSkeleton()
                     : CurrencyDropdown(
                         title: 'To',
                         value: toCurrency.value,

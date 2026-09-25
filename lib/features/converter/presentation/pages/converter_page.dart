@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:currency_converter/core/presentation/widgets/responsive_page_container.dart';
 import 'package:currency_converter/core/theme/dimens.dart';
 import 'package:currency_converter/features/converter/presentation/bloc/converter_bloc.dart';
 import 'package:currency_converter/features/converter/presentation/bloc/converter_state.dart';
@@ -34,23 +35,20 @@ class ConverterPage extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 600),
-            child: ListView(
-              padding: const EdgeInsetsDirectional.all(Dimens.spacingL),
-              children: [
-                const ConverterForm(),
-                const SizedBox(height: Dimens.spacingXL),
-                // Beautifully readable structural variance using exhaustive Dart 3 declarative switches
-                switch (state) {
-                  ConverterSuccess() => ConversionResultCard(state: state),
-                  ConverterInitial() ||
-                  ConverterLoading() ||
-                  ConverterError() => const SizedBox.shrink(),
-                },
-              ],
-            ),
+        return ResponsivePageContainer(
+          child: ListView(
+            padding: const EdgeInsetsDirectional.all(Dimens.spacingL),
+            children: [
+              const ConverterForm(),
+              const SizedBox(height: Dimens.spacingXL),
+              // Beautifully readable structural variance using exhaustive Dart 3 declarative switches
+              switch (state) {
+                ConverterSuccess() => ConversionResultCard(state: state),
+                ConverterInitial() ||
+                ConverterLoading() ||
+                ConverterError() => const SizedBox.shrink(),
+              },
+            ],
           ),
         );
       },

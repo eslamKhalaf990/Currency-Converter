@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:currency_converter/core/presentation/widgets/responsive_page_container.dart';
 import 'package:currency_converter/core/theme/dimens.dart';
 import 'package:currency_converter/core/utils/date_utils.dart';
 import 'package:currency_converter/features/history/domain/entities/conversion_record.dart';
@@ -32,32 +33,29 @@ class HistoryPage extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 600),
-            child: switch (state) {
-              HistoryInitial() || HistoryLoading() => const Center(
-                child: CircularProgressIndicator(),
+        return ResponsivePageContainer(
+          child: switch (state) {
+            HistoryInitial() || HistoryLoading() => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            HistoryError() => Center(
+              child: Text(
+                'Failed to load history.',
+                style: textTheme.bodyLarge,
               ),
-              HistoryError() => Center(
-                child: Text(
-                  'Failed to load history.',
-                  style: textTheme.bodyLarge,
-                ),
-              ),
-              HistoryLoaded(:final records) =>
-                records.isEmpty
-                    ? Center(
-                        child: Text(
-                          'No conversion history available.',
-                          style: textTheme.bodyLarge?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
+            ),
+            HistoryLoaded(:final records) =>
+              records.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No conversion history available.',
+                        style: textTheme.bodyLarge?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
                         ),
-                      )
-                    : _buildHistoryList(context, records, theme),
-            },
-          ),
+                      ),
+                    )
+                  : _buildHistoryList(context, records, theme),
+          },
         );
       },
     );
