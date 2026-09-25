@@ -2,6 +2,14 @@
 
 A professional-grade Currency Converter mobile application built with Flutter.
 
+## App Screenshots
+
+<p align="center">
+  <img src="documents/app_screenshots/Screenshot_iPhone_18_Pro_25-09-2026_at_7.05.28_PM.png" width="250">
+  <img src="documents/app_screenshots/Screenshot_iPhone_18_Pro_25-09-2026_at_7.17.44_PM.png" width="250">
+  <img src="documents/app_screenshots/Screenshot_iPhone_18_Pro_25-09-2026_at_7.17.49_PM.png" width="250">
+</p>
+
 ## 1. Project Overview & Setup Instructions
 
 This repository contains the foundation of a robust Currency Converter application. The core architecture, data layer, domain logic, networking, and the responsive presentation (UI) layer are fully implemented and integrated.
