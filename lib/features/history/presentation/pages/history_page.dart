@@ -18,56 +18,48 @@ class HistoryPage extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const SizedBox.shrink(),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: theme.iconTheme.copyWith(color: theme.colorScheme.onSurface),
-      ),
-      body: BlocConsumer<HistoryBloc, HistoryState>(
-        listener: (context, state) {
-          if (state is HistoryError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: theme.colorScheme.error,
-                behavior: SnackBarBehavior.floating,
-                margin: const EdgeInsetsDirectional.all(Dimens.spacingM),
-              ),
-            );
-          }
-        },
-        builder: (context, state) {
-          return Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 600),
-              child: switch (state) {
-                HistoryInitial() || HistoryLoading() => const Center(
-                  child: CircularProgressIndicator(),
-                ),
-                HistoryError() => Center(
-                  child: Text(
-                    'Failed to load history.',
-                    style: textTheme.bodyLarge,
-                  ),
-                ),
-                HistoryLoaded(:final records) =>
-                  records.isEmpty
-                      ? Center(
-                          child: Text(
-                            'No conversion history available.',
-                            style: textTheme.bodyLarge?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                        )
-                      : _buildHistoryList(context, records, theme),
-              },
+    return BlocConsumer<HistoryBloc, HistoryState>(
+      listener: (context, state) {
+        if (state is HistoryError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: theme.colorScheme.error,
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsetsDirectional.all(Dimens.spacingM),
             ),
           );
-        },
-      ),
+        }
+      },
+      builder: (context, state) {
+        return Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: switch (state) {
+              HistoryInitial() || HistoryLoading() => const Center(
+                child: CircularProgressIndicator(),
+              ),
+              HistoryError() => Center(
+                child: Text(
+                  'Failed to load history.',
+                  style: textTheme.bodyLarge,
+                ),
+              ),
+              HistoryLoaded(:final records) =>
+                records.isEmpty
+                    ? Center(
+                        child: Text(
+                          'No conversion history available.',
+                          style: textTheme.bodyLarge?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      )
+                    : _buildHistoryList(context, records, theme),
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -89,7 +81,7 @@ class HistoryPage extends StatelessWidget {
 
     final List<Widget> listItems = [
       Padding(
-        padding: const EdgeInsetsDirectional.only(bottom: Dimens.spacingXL),
+        padding: const EdgeInsetsDirectional.only(bottom: Dimens.spacingXL, top: Dimens.spacingM),
         child: Text('Converting History', style: theme.textTheme.headlineLarge),
       ),
     ];

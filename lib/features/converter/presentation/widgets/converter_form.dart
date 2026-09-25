@@ -48,18 +48,11 @@ class ConverterForm extends HookWidget {
       );
     }
 
-    void handleReset() {
-      amountController.clear();
-      amountError.value = null;
-      fromCurrency.value = 'EUR';
-      toCurrency.value = 'USD';
-    }
-
     // Explicit Clean Structural Hierarchy
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ConverterHeader(onReset: handleReset),
+        const ConverterHeader(),
         const SizedBox(height: Dimens.spacingL),
         CurrencySwapSection(
           fromCurrency: fromCurrency,

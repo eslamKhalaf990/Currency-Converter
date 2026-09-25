@@ -57,7 +57,8 @@ class HistoryRowItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       if (baseCur != null &&
                           baseCur.flag != null &&

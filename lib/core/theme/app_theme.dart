@@ -40,6 +40,24 @@ class AppTheme {
           fontWeight: FontWeight.w600,
         ),
       ),
+      // Navigation Bar styling mapped to the white background and green primary app color
+      navigationBarTheme: NavigationBarThemeData(
+        height: 65, // Minimized height vs default 80
+        backgroundColor: white,
+        indicatorColor: primaryColor.withValues(alpha: 0.12),
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return const IconThemeData(color: primaryColor);
+          }
+          return const IconThemeData(color: neutralText);
+        }),
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return const TextStyle(color: primaryColor, fontWeight: FontWeight.w600, fontSize: 13);
+          }
+          return const TextStyle(color: neutralText, fontWeight: FontWeight.w500, fontSize: 13);
+        }),
+      ),
       // Typography Scale overrides
       textTheme: const TextTheme(
         headlineLarge: TextStyle(
