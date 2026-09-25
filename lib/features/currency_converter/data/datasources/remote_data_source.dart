@@ -1,0 +1,36 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+import 'package:dio/dio.dart';
+
+import '../../../../../core/utils/json_parser.dart';
+import '../models/exchange_rate_model.dart';
+
+/// Contract dictating the specific endpoint interaction mapping rules for the remote host.
+abstract class CurrencyRemoteDataSource {
+  /// Pulls live real-time rate multipliers dynamically from the server endpoint based on client currency choices.
+  Future<List<ExchangeRateModel>> getExchangeRates(String baseCurrency);
+}
+
+/// Implements standard REST GET requests over the dio networking library.
+class CurrencyRemoteDataSourceImpl implements CurrencyRemoteDataSource {
+  final Dio dio;
+
+  CurrencyRemoteDataSourceImpl({required this.dio});
+
+  @override
+  Future<List<ExchangeRateModel>> getExchangeRates(String baseCurrency) async {
+    final response = await dio.get(
+      '/v2/rates',
+      queryParameters: {'base': baseCurrency},
+    );
+
+    final responseData = response.data;
+    // To strictly use compute() with a String as requested:
+    final rawJson = responseData is String
+        ? responseData
+        : jsonEncode(responseData);
+
+    return await compute(parseExchangeRatesList, rawJson);
+  }
+}
