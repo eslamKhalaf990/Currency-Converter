@@ -31,6 +31,9 @@ A core philosophy of this project is continuous, meticulous auditing of every li
 - **Fintech Standards (Migrating Away from Doubles):** 
   During a meticulous sweep of the data models and entity structures, the usage of standard primitive `double` types for monetary amounts was identified. Acknowledging that primitive floating-point arithmetic inherently produces precision loss, a deliberate architectural migration was executed to replace all `double` references with precision-safe `Decimal` types across all layers. This guarantees banking-grade arithmetic consistency.
 
+- **Production-Secure Networking (Dio Logging):** 
+  A critical audit of the networking stack revealed HTTP request and response logging (`LogInterceptor`) was unconditionally enabled. To secure the application aligning with enterprise best practices, the Dio instantiation was refactored to conditionally inject the `LogInterceptor` exclusively during `kDebugMode`. This absolutely prevents sensitive data, payloads, or headers from leaking into production console logs, while a new dedicated `ErrorInterceptor` handles clean functional error mappings.
+
 - **Main Thread Preservation (Isolates & Compute):** 
   While analyzing the data flow, it was recognized that mapping large lists of deeply nested JSON from the exchange rates API could block the main UI thread during network responses, leading to dropped frames (UI stutter). Consequently, a conscious architectural decision was made to abstract all JSON parsing in both `LocalDataSource` and `RemoteDataSource` into Dart background isolates using `compute()`, ensuring a fluid 60FPS user experience even with massive payloads.
 
