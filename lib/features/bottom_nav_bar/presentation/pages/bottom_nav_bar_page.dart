@@ -1,8 +1,8 @@
+import 'package:currency_converter/core/widgets/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:currency_converter/core/di/injection.dart' as di;
-import 'package:currency_converter/core/presentation/widgets/responsive_layout.dart';
 import 'package:currency_converter/features/converter/presentation/bloc/converter_bloc.dart';
 import 'package:currency_converter/features/converter/presentation/pages/converter_page.dart';
 import 'package:currency_converter/features/history/presentation/bloc/history_bloc.dart';

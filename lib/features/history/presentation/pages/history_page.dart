@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:currency_converter/core/presentation/widgets/responsive_page_container.dart';
+import 'package:currency_converter/core/widgets/responsive_page_container.dart';
 import 'package:currency_converter/core/theme/dimens.dart';
 import 'package:currency_converter/core/utils/date_utils.dart';
 import 'package:currency_converter/features/history/domain/entities/conversion_record.dart';
