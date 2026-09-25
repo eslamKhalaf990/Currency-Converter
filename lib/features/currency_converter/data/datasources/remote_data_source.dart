@@ -21,7 +21,7 @@ class CurrencyRemoteDataSourceImpl implements CurrencyRemoteDataSource {
   @override
   Future<List<ExchangeRateModel>> getExchangeRates(String baseCurrency) async {
     final response = await dio.get(
-      '/v2/rates',
+      '/latest', // The correct endpoint for frankfurter.app
       queryParameters: {'base': baseCurrency},
     );
 
@@ -31,6 +31,7 @@ class CurrencyRemoteDataSourceImpl implements CurrencyRemoteDataSource {
         ? responseData
         : jsonEncode(responseData);
 
-    return await compute(parseExchangeRatesList, rawJson);
+    // Call the specific parser for Frankfurter's nested object structure
+    return await compute(parseFrankfurterResponse, rawJson);
   }
 }

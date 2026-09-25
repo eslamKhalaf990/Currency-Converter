@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:decimal/decimal.dart';
+
 import '../../features/currency_converter/data/models/exchange_rate_model.dart';
 import '../../features/currency_converter/data/models/conversion_record_model.dart';
 
@@ -14,11 +16,27 @@ List<dynamic> parseJsonList(String responseBody) {
 }
 
 /// Specifically parses heavily populated raw exchange rate strings into native Models while executing inside Dart's `compute()` isolation limit.
+/// Used for reading from the Hive cache which stores it as a List of Maps.
 List<ExchangeRateModel> parseExchangeRatesList(String responseBody) {
   final decoded = jsonDecode(responseBody) as List<dynamic>;
   return decoded
       .map((json) => ExchangeRateModel.fromJson(json as Map<String, dynamic>))
       .toList();
+}
+
+/// Parses the unique Map payload returned directly from the Frankfurter API endpoint.
+List<ExchangeRateModel> parseFrankfurterResponse(String responseBody) {
+  final decoded = jsonDecode(responseBody) as Map<String, dynamic>;
+  final baseCurrency = decoded['base'] as String;
+  final ratesMap = decoded['rates'] as Map<String, dynamic>;
+
+  return ratesMap.entries.map((entry) {
+    return ExchangeRateModel(
+      baseCurrency: baseCurrency,
+      targetCurrency: entry.key,
+      rate: Decimal.parse(entry.value.toString()),
+    );
+  }).toList();
 }
 
 /// Parses an iterable of JSON strings representing conversion records into a sorted List of models.
