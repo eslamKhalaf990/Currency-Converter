@@ -18,6 +18,7 @@ import 'package:currency_converter/features/history/domain/usecases/save_convers
 import 'package:currency_converter/features/history/presentation/bloc/history_bloc.dart';
 
 import 'package:currency_converter/core/network/dio_client.dart';
+import 'package:currency_converter/core/theme/theme_cubit.dart';
 
 final sl = GetIt.instance; // sl stands for Service Locator
 
@@ -28,6 +29,7 @@ Future<void> initDependencies() async {
   await Hive.initFlutter();
   final historyBox = await Hive.openBox<String>('historyBox');
   final ratesCacheBox = await Hive.openBox<String>('ratesCacheBox');
+  final settingsBox = await Hive.openBox('settingsBox');
 
   // 2. Data Sources - Converter
   sl.registerLazySingleton<ConverterLocalDataSource>(
@@ -62,8 +64,9 @@ Future<void> initDependencies() async {
     () => HistoryBloc(getHistory: sl(), deleteHistoryEntry: sl()),
   );
 
-  // ConverterBloc uses saveConversion
   sl.registerFactory(
     () => ConverterBloc(getExchangeRates: sl(), saveConversion: sl()),
   );
+  
+  sl.registerLazySingleton<ThemeCubit>(() => ThemeCubit(settingsBox));
 }
