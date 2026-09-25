@@ -20,7 +20,11 @@ void main() {
 
   const tBaseCurrency = 'USD';
   final tExchangeRates = [
-    ExchangeRate(baseCurrency: 'USD', targetCurrency: 'EUR', rate: Decimal.parse('0.85')),
+    ExchangeRate(
+      baseCurrency: 'USD',
+      targetCurrency: 'EUR',
+      rate: Decimal.parse('0.85'),
+    ),
   ];
 
   group('GetExchangeRates', () {

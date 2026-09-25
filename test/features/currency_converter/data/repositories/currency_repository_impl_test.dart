@@ -30,7 +30,11 @@ void main() {
 
   const tBaseCurrency = 'USD';
   final tExchangeRateModels = [
-    ExchangeRateModel(baseCurrency: 'USD', targetCurrency: 'EUR', rate: Decimal.parse('0.85')),
+    ExchangeRateModel(
+      baseCurrency: 'USD',
+      targetCurrency: 'EUR',
+      rate: Decimal.parse('0.85'),
+    ),
   ];
 
   group('getExchangeRates', () {
