@@ -16,7 +16,15 @@ class ConverterLocalDataSourceImpl implements ConverterLocalDataSource {
 
   @override
   Future<void> cacheExchangeRates(String baseCurrency, List<ExchangeRateModel> rates) async {
-    final list = rates.map((r) => r.toJson()).toList();
+    final now = DateTime.now().toIso8601String();
+    
+    // Convert to JSON and stamp with the current timestamp
+    final list = rates.map((r) {
+      final json = r.toJson();
+      json['lastUpdated'] = now;
+      return json;
+    }).toList();
+    
     final jsonStr = jsonEncode(list);
     await ratesCacheBox.put(baseCurrency, jsonStr);
   }

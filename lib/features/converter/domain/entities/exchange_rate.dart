@@ -14,12 +14,16 @@ class ExchangeRate extends Equatable {
   /// Uses Decimal instead of double to prevent floating point precision errors.
   final Decimal rate;
 
+  /// Optional timestamp for when this rate was cached locally.
+  final DateTime? lastUpdated;
+
   const ExchangeRate({
     required this.baseCurrency,
     required this.targetCurrency,
     required this.rate,
+    this.lastUpdated,
   });
 
   @override
-  List<Object?> get props => [baseCurrency, targetCurrency, rate];
+  List<Object?> get props => [baseCurrency, targetCurrency, rate, lastUpdated];
 }

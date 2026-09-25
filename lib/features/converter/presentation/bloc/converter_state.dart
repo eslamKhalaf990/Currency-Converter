@@ -20,16 +20,18 @@ final class ConverterSuccess extends ConverterState {
   final String fromCurrency;
   final String toCurrency;
   final double rate;
+  final DateTime? cachedUpdatedAt;
 
   const ConverterSuccess({
     required this.resultMinorUnits,
     required this.fromCurrency,
     required this.toCurrency,
     required this.rate,
+    this.cachedUpdatedAt,
   });
 
   @override
-  List<Object?> get props => [resultMinorUnits, fromCurrency, toCurrency, rate];
+  List<Object?> get props => [resultMinorUnits, fromCurrency, toCurrency, rate, cachedUpdatedAt];
 }
 
 final class ConverterError extends ConverterState {

@@ -77,6 +77,37 @@ class ConversionResultCard extends StatelessWidget {
               color: colorScheme.onSurfaceVariant,
             ),
           ),
+          if (state.cachedUpdatedAt != null) ...[
+            const SizedBox(height: Dimens.spacingL),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: Dimens.spacingS,
+                horizontal: Dimens.spacingM,
+              ),
+              decoration: BoxDecoration(
+                color: colorScheme.errorContainer,
+                borderRadius: BorderRadius.circular(Dimens.radiusS),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.offline_bolt,
+                    color: colorScheme.onErrorContainer,
+                    size: 20,
+                  ),
+                  const SizedBox(width: Dimens.spacingS),
+                  Expanded(
+                    child: Text(
+                      '⚠️ You are offline. Showing cached rates from ${DateFormat.yMd().add_jm().format(state.cachedUpdatedAt!)}',
+                      style: textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onErrorContainer,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );

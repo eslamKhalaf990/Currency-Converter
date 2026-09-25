@@ -69,6 +69,7 @@ class ConverterBloc extends Bloc<ConverterEvent, ConverterState> {
               fromCurrency: event.fromCurrency,
               toCurrency: event.toCurrency,
               rate: targetRate.rate.toDouble(),
+              cachedUpdatedAt: targetRate.lastUpdated,
             ),
           );
 

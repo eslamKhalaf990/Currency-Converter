@@ -9,6 +9,7 @@ class ExchangeRateModel extends ExchangeRate {
     required super.baseCurrency,
     required super.targetCurrency,
     required super.rate,
+    super.lastUpdated,
   });
 
   /// Decodes raw remote JSON into the structural model.
@@ -17,6 +18,9 @@ class ExchangeRateModel extends ExchangeRate {
       baseCurrency: json['base'] as String,
       targetCurrency: json['quote'] as String,
       rate: Decimal.parse(json['rate'].toString()),
+      lastUpdated: json['lastUpdated'] != null 
+          ? DateTime.tryParse(json['lastUpdated'] as String) 
+          : null,
     );
   }
 
@@ -26,6 +30,7 @@ class ExchangeRateModel extends ExchangeRate {
       'base': baseCurrency,
       'quote': targetCurrency,
       'rate': rate.toString(),
+      if (lastUpdated != null) 'lastUpdated': lastUpdated!.toIso8601String(),
     };
   }
 }
