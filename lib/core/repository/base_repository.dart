@@ -2,8 +2,8 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
 
-import '../error/exceptions.dart';
-import '../error/failures.dart';
+import 'package:currency_converter/core/error/exceptions.dart';
+import 'package:currency_converter/core/error/failures.dart';
 
 typedef RemoteCall<T> = Future<T> Function();
 typedef MapperContext<T, R> = R Function(T data);

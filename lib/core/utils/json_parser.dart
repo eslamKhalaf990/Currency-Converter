@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:decimal/decimal.dart';
 
-import '../../features/currency_converter/data/models/exchange_rate_model.dart';
-import '../../features/currency_converter/data/models/conversion_record_model.dart';
+import 'package:currency_converter/features/converter/data/models/exchange_rate_model.dart';
+import 'package:currency_converter/features/history/data/models/conversion_record_model.dart';
 
 /// Top-level helper function to convert string payloads mapping out of the UI thread context.
 Map<String, dynamic> parseJsonObject(String responseBody) {

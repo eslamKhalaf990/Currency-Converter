@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:decimal/decimal.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:currency_converter/core/utils/json_parser.dart';
-import 'package:currency_converter/features/currency_converter/data/models/exchange_rate_model.dart';
+import 'package:currency_converter/features/converter/data/models/exchange_rate_model.dart';
 
 void main() {
   group('parseFrankfurterResponse', () {

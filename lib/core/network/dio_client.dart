@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 
-import '../error/exceptions.dart';
+import 'package:currency_converter/core/error/exceptions.dart';
 
 class ApiEndpoints {
   static const String baseUrl = 'https://api.frankfurter.app';

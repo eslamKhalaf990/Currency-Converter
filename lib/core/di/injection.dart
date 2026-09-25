@@ -1,18 +1,23 @@
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../../features/currency_converter/data/datasources/local_data_source.dart';
-import '../../features/currency_converter/data/datasources/remote_data_source.dart';
-import '../../features/currency_converter/data/repositories/currency_repository_impl.dart';
-import '../../features/currency_converter/domain/repositories/currency_repository.dart';
-import '../../features/currency_converter/domain/usecases/delete_history_entry.dart';
-import '../../features/currency_converter/domain/usecases/get_currencies.dart';
-import '../../features/currency_converter/domain/usecases/get_exchange_rates.dart';
-import '../../features/currency_converter/domain/usecases/get_history.dart';
-import '../../features/currency_converter/domain/usecases/save_conversion.dart';
-import '../../features/currency_converter/presentation/bloc/converter_bloc.dart';
-import '../../features/currency_converter/presentation/bloc/history/history_bloc.dart';
-import '../network/dio_client.dart';
+import 'package:currency_converter/features/converter/data/datasources/converter_local_data_source.dart';
+import 'package:currency_converter/features/converter/data/datasources/converter_remote_data_source.dart';
+import 'package:currency_converter/features/converter/data/repositories/converter_repository_impl.dart';
+import 'package:currency_converter/features/converter/domain/repositories/converter_repository.dart';
+import 'package:currency_converter/features/converter/domain/usecases/get_currencies.dart';
+import 'package:currency_converter/features/converter/domain/usecases/get_exchange_rates.dart';
+import 'package:currency_converter/features/converter/presentation/bloc/converter_bloc.dart';
+
+import 'package:currency_converter/features/history/data/datasources/history_local_data_source.dart';
+import 'package:currency_converter/features/history/data/repositories/history_repository_impl.dart';
+import 'package:currency_converter/features/history/domain/repositories/history_repository.dart';
+import 'package:currency_converter/features/history/domain/usecases/delete_history_entry.dart';
+import 'package:currency_converter/features/history/domain/usecases/get_history.dart';
+import 'package:currency_converter/features/history/domain/usecases/save_conversion.dart';
+import 'package:currency_converter/features/history/presentation/bloc/history_bloc.dart';
+
+import 'package:currency_converter/core/network/dio_client.dart';
 
 final sl = GetIt.instance; // sl stands for Service Locator
 
@@ -24,23 +29,25 @@ Future<void> initDependencies() async {
   final historyBox = await Hive.openBox<String>('historyBox');
   final ratesCacheBox = await Hive.openBox<String>('ratesCacheBox');
 
-  // 2. Core (NetworkInfo, etc.)
-
-  // 3. Data Sources
-  sl.registerLazySingleton<CurrencyLocalDataSource>(
-    () => CurrencyLocalDataSourceImpl(
-      historyBox: historyBox,
-      ratesCacheBox: ratesCacheBox,
-    ),
+  // 2. Data Sources - Converter
+  sl.registerLazySingleton<ConverterLocalDataSource>(
+    () => ConverterLocalDataSourceImpl(ratesCacheBox: ratesCacheBox),
+  );
+  sl.registerLazySingleton<ConverterRemoteDataSource>(
+    () => ConverterRemoteDataSourceImpl(dio: sl()),
   );
 
-  sl.registerLazySingleton<CurrencyRemoteDataSource>(
-    () => CurrencyRemoteDataSourceImpl(dio: sl()),
+  // 3. Data Sources - History
+  sl.registerLazySingleton<HistoryLocalDataSource>(
+    () => HistoryLocalDataSourceImpl(historyBox: historyBox),
   );
 
   // 4. Repositories
-  sl.registerLazySingleton<CurrencyRepository>(
-    () => CurrencyRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()),
+  sl.registerLazySingleton<ConverterRepository>(
+    () => ConverterRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()),
+  );
+  sl.registerLazySingleton<HistoryRepository>(
+    () => HistoryRepositoryImpl(localDataSource: sl()),
   );
 
   // 5. Use Cases
@@ -55,6 +62,7 @@ Future<void> initDependencies() async {
     () => HistoryBloc(getHistory: sl(), deleteHistoryEntry: sl()),
   );
 
+  // ConverterBloc uses saveConversion
   sl.registerFactory(
     () => ConverterBloc(getExchangeRates: sl(), saveConversion: sl()),
   );

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'core/di/injection.dart' as di;
-import 'core/theme/app_theme.dart';
-import 'features/currency_converter/presentation/bloc/converter_bloc.dart';
-import 'features/currency_converter/presentation/pages/converter_page.dart';
+import 'package:currency_converter/core/di/injection.dart' as di;
+import 'package:currency_converter/core/theme/app_theme.dart';
+import 'package:currency_converter/features/converter/presentation/bloc/converter_bloc.dart';
+import 'package:currency_converter/features/converter/presentation/pages/converter_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
