@@ -24,9 +24,9 @@ List<ExchangeRateModel> parseExchangeRatesList(String responseBody) {
       .toList();
 }
 
-/// Parses the unique Map payload returned directly from the Frankfurter API endpoint.
-List<ExchangeRateModel> parseFrankfurterResponse(String responseBody) {
-  final decoded = jsonDecode(responseBody) as Map<String, dynamic>;
+/// Helper function to parse already decoded map from Dio into models.
+/// Dio automatically decodes JSON in a background isolate, so we don't need a string here.
+List<ExchangeRateModel> mapFrankfurterResponse(Map<String, dynamic> decoded) {
   final baseCurrency = decoded['base'] as String;
   final ratesMap = decoded['rates'] as Map<String, dynamic>;
 
@@ -34,9 +34,16 @@ List<ExchangeRateModel> parseFrankfurterResponse(String responseBody) {
     return ExchangeRateModel(
       baseCurrency: baseCurrency,
       targetCurrency: entry.key,
+      // Handle int or double seamlessly
       rate: Decimal.parse(entry.value.toString()),
     );
   }).toList();
+}
+
+/// Parses the unique Map payload returned directly from the Frankfurter API endpoint if it was a raw string.
+List<ExchangeRateModel> parseFrankfurterResponse(String responseBody) {
+  final decoded = jsonDecode(responseBody) as Map<String, dynamic>;
+  return mapFrankfurterResponse(decoded);
 }
 
 /// Parses an iterable of JSON strings representing conversion records into a sorted List of models.

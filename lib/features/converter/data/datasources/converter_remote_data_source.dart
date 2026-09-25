@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 
 import 'package:currency_converter/core/utils/json_parser.dart';
 import 'package:currency_converter/features/converter/data/models/exchange_rate_model.dart';
+import 'package:currency_converter/core/error/exceptions.dart';
 
 /// Contract dictating the specific endpoint interaction mapping rules for the remote host.
 abstract class ConverterRemoteDataSource {
@@ -29,13 +28,13 @@ class ConverterRemoteDataSourceImpl implements ConverterRemoteDataSource {
     );
 
     final responseData = response.data;
-    // To strictly use compute() with a String as requested:
-    final rawJson = responseData is String
-        ? responseData
-        : jsonEncode(responseData);
-
-    // Call the specific parser for Frankfurter's nested object structure
-    return await compute(parseFrankfurterResponse, rawJson);
+    
+    if (responseData is Map<String, dynamic>) {
+      // Dio successfully decoded the response in an isolate. We map it using compute to avoid blocking the main thread.
+      return await compute(mapFrankfurterResponse, responseData);
+    } else {
+      throw const ServerException('Invalid response format');
+    }
   }
 
   @override
@@ -43,14 +42,10 @@ class ConverterRemoteDataSourceImpl implements ConverterRemoteDataSource {
     final response = await dio.get('/currencies');
     final responseData = response.data;
 
-    final rawJson = responseData is String
-        ? responseData
-        : jsonEncode(responseData);
-
-    final Map<String, dynamic> parsedJson = await compute(
-      parseJsonObject,
-      rawJson,
-    );
-    return parsedJson.map((key, value) => MapEntry(key, value.toString()));
+    if (responseData is Map<String, dynamic>) {
+      return responseData.map((key, value) => MapEntry(key, value.toString()));
+    } else {
+       throw const ServerException('Invalid response format');
+    }
   }
 }
